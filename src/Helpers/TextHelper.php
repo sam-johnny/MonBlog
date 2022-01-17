@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-class Text
+class TextHelper
 {
     public static function excerpt($content, $limit = 110)
     {
