@@ -5,48 +5,58 @@ namespace App\Table;
 use App\PaginatedQuery;
 use App\Model\Post;
 
-class PostTable extends Table
+class PostTable extends AbstractTable
 {
     protected $table = "post";
     protected $class = Post::class;
 
-    public function update(Post $post): void
+    public function updatePost(Post $post): void
     {
-        $query = $this->pdo->prepare("UPDATE {$this->table} SET name = :name, slug = :slug, content = :content, created_at = :created WHERE id = :id");
-        $ok = $query->execute([
-            'id' => $post->getID(),
-            'name' => $post->getName(),
+        $this->update([
+            'title' => $post->getTitle(),
             'slug' => $post->getSlug(),
             'content' => $post->getContent(),
-            'created' => $post->getCreatedAt()->format('Y-m-d H:i:s')
-        ]);
-        if ($ok === false) {
-            throw new \Exception("Impossible de modifier l'enregistrement $id dans la table {$this->table}");
-        }
+            'created_at' => $post->getCreatedAt()->format('Y-m-d H:i:s')
+        ], $post->getID());
     }
 
-    public function delete(int $id): void
+    public function createPost(Post $post): void
     {
-        $query = $this->pdo->prepare("DELETE FROM {$this->table} WHERE id = ?");
-        $ok = $query->execute([$id]);
-        if ($ok === false) {
-            throw new \Exception("Impossible de supprimer l'enregistrement $id dans la table {$this->table}");
+        $id = $this->create([
+            'title' => $post->getTitle(),
+            'slug' => $post->getSlug(),
+            'content' => $post->getContent(),
+            'created_at' => $post->getCreatedAt()->format('Y-m-d H:i:s')
+        ]);
+        $post->setID($id);
+
+    }
+
+    public function attachCategories(int $id, array $categories): void
+    {
+        $this->pdo->exec('DELETE FROM post_category WHERE post_id = ' . $id);
+        $query = $this->pdo->prepare('INSERT INTO post_category SET post_id = ?, category_id = ?');
+        foreach ($categories as $category) {
+            $query->execute([$id, $category]);
         }
     }
 
-    public function findPaginated()
+
+    public function findPaginated(int $limitPage): array
     {
         $paginatedQuery = new PaginatedQuery(
             "SELECT * FROM post ORDER BY created_at DESC",
             "SELECT COUNT(id) FROM {$this->table}",
-            $this->pdo
+            $limitPage,
+            $this->pdo,
         );
-        $posts = $paginatedQuery->getItems(Post::class);
-        (new CategoryTable($this->pdo))->categoriesInPosts($posts);
-        return [$posts, $paginatedQuery];
+        $posts = $paginatedQuery->getItems($this->class);
+        (new CategoryTable($this->pdo))->hydratePosts($posts);
+        $totalPages = $paginatedQuery->getTotalPages();
+        return [$posts, $paginatedQuery, $totalPages];
     }
 
-    public function findPaginatedForCategory(int $categoryID)
+    public function findPaginatedForCategory(int $categoryID, int $limitPage): array
     {
         $paginatedQuery = new PaginatedQuery(
             "SELECT p.*
@@ -54,26 +64,13 @@ class PostTable extends Table
             JOIN post_category pc ON pc.post_id = p.id
             WHERE pc.category_id = {$categoryID}
             ORDER BY created_at DESC",
-            "SELECT COUNT(category_id) FROM post_category WHERE category_id = {$categoryID}"
+            "SELECT COUNT(category_id) FROM post_category WHERE category_id = {$categoryID}",
+            $limitPage
         );
-        $posts = $paginatedQuery->getItems(Post::class);
-        (new CategoryTable($this->pdo))->categoriesInPosts($posts);
-        return [$posts, $paginatedQuery];
+        $posts = $paginatedQuery->getItems($this->class);
+        (new CategoryTable($this->pdo))->hydratePosts($posts);
+        $totalPages = $paginatedQuery->getTotalPages();
+        return [$posts, $paginatedQuery, $totalPages];
     }
 
-    public function create(Post $post): void
-    {
-        $query = $this->pdo->prepare("INSERT INTO {$this->table} SET name = :name, slug = :slug, content = :content, created_at = :created");
-        $ok = $query->execute([
-            'name' => $post->getName(),
-            'slug' => $post->getSlug(),
-            'content' => $post->getContent(),
-            'created' => $post->getCreatedAt()->format('Y-m-d H:i:s')
-        ]);
-        if ($ok === false) {
-            throw new \Exception("Impossible de créer l'enregistrement dans la table {$this->table}");
-            $post->setID($this->pdo->lastInsertId());
-        }
-        $post->setID($this->pdo->lastInsertId());
-    }
 }
