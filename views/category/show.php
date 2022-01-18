@@ -1,41 +1,24 @@
-<?php
+<!--Section : La liste article par catégorie-->
+<section class="my-5">
+    <h1 class="my-5">Catégorie : <?= $title ?> </h1>
+    <!--Card pour les articles-->
+    <div class="row">
+        <?php foreach ($posts as $post): ?>
+            <div class="col-md-12">
+                <?php require dirname(__DIR__) . '/post/cardPost.php' ?>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</section>
 
-use App\DbConnect;
-use App\Table\{PostTable, CategoryTable};
-
-
-$id = (int)$params['id'];
-$slug = $params['slug'];
-
-$pdo = DbConnect::getPDO();
-$category = (new CategoryTable($pdo))->find($id);
-
-if ($category->getSlug() !== $slug) {
-    $url = $router->url('category', ['slug' => $category->getSlug(), 'id' => $id]);
-    http_response_code('301');
-    header('Location: ' . $url);
-}
-
-$title = "Catégorie {$category->getName()}";
-
-[$posts, $paginatedQuery] = (new PostTable($pdo))->findPaginatedForCategory($category->getID());
-
-$link = $router->url('category', ['id' => $category->getID(), 'slug' => $category->getSlug()]);
-?>
-
-
-<h1><?= htmlentities($title) ?> </h1>
-
-<div class="row">
-    <?php foreach ($posts as $post): ?>
-        <div class="col-md-12">
-            <?php require dirname(__DIR__) . '/post/card.php' ?>
-        </div>
-    <?php endforeach; ?>
+<!--Pagination-->
+<?php if ($totalPages > 1): ?>
+<div class="my-5">
+    <ul class="pagination justify-content-center">
+        <?= $paginatedQuery->previousPage($link) ?>
+        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+            <?= $paginatedQuery->numPage($link, $i) ?>
+        <?php endfor; ?>
+        <?= $paginatedQuery->nextPage($link); ?>
 </div>
-
-<div class="d-flex justify-content-between my-4">
-    <?= $paginatedQuery->previousPage($link) ?>
-    <?= $paginatedQuery->nextPage($link) ?>
-
-</div>
+<?php endif; ?>
