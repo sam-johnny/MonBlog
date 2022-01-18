@@ -18,10 +18,10 @@ USE `db_myblog` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `db_myblog`.`post` (
                                                   `id` INT NOT NULL AUTO_INCREMENT,
-                                                  `name` VARCHAR(255) NOT NULL,
+                                                  `title` VARCHAR(255) NOT NULL,
     `slug` VARCHAR(255) NOT NULL,
     `content` TEXT(650000) NOT NULL,
-    `created_at` DATE NOT NULL,
+    `created_at` DATETIME NOT NULL,
     PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS `db_myblog`.`user` (
     `username` VARCHAR(255) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255) NOT NULL,
+    `role` VARCHAR(13) NOT NULL,
     PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
@@ -69,6 +70,27 @@ CREATE TABLE IF NOT EXISTS `db_myblog`.`post_category` (
     ENGINE = InnoDB;
 
 CREATE INDEX `fk_category_idx` ON `db_myblog`.`post_category` (`category_id` ASC) VISIBLE;
+
+-- -----------------------------------------------------
+-- Table `db_myblog`.`comment`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_myblog`.`comment` (
+                                                     `id` INT NOT NULL AUTO_INCREMENT,
+                                                     `username` VARCHAR(45) NOT NULL,
+    `content` TEXT(650000) NOT NULL,
+    `created_at` DATETIME NOT NULL,
+    `status` VARCHAR(100) NOT NULL,
+    `email` VARCHAR(255) NOT NULL,
+    `post_id` INT NOT NULL,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk_comments_post1`
+    FOREIGN KEY (`post_id`)
+    REFERENCES `db_myblog`.`post` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT)
+    ENGINE = InnoDB;
+
+CREATE INDEX `fk_comments_post1_idx` ON `db_myblog`.`comment` (`post_id` ASC) VISIBLE;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
