@@ -42,7 +42,7 @@ class PostTable extends AbstractTable
     }
 
 
-    public function findPaginated(int $limitPage): array
+    public function findPaginated(int $limitPage)
     {
         $paginatedQuery = new PaginatedQuery(
             "SELECT * FROM post ORDER BY created_at DESC",
@@ -56,7 +56,7 @@ class PostTable extends AbstractTable
         return [$posts, $paginatedQuery, $totalPages];
     }
 
-    public function findPaginatedForCategory(int $categoryID, int $limitPage): array
+    public function findPaginatedForCategory(int $categoryID, int $limitPage)
     {
         $paginatedQuery = new PaginatedQuery(
             "SELECT p.*
