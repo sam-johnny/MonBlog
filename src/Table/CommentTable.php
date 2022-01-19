@@ -3,7 +3,6 @@
 namespace App\Table;
 
 use App\Model\Comment;
-use App\PaginatedQuery;
 
 class CommentTable extends AbstractTable
 {
