@@ -2,7 +2,7 @@
 
 namespace App;
 
-class ObjectHelper
+class ObjectHandler
 {
     public static function hydrate($object, array $data, array $fields): void
     {
