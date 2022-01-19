@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Helper;
 
-class Text
+class TextHelper
 {
-    public static function excerpt($content, $limit = 110)
+    public static function excerpt($content, $limit = 110): string
     {
         if (mb_strlen($content) <= $limit) {
             return $content;
