@@ -32,15 +32,22 @@ class Form
 HTML;
     }
 
+    public function inputUpdateDate(string $key, string $label): string
+    {
+        $value = date('Y-m-d H:i:s');
+        return <<<HTML
+    <div class="form-group mb-3">
+        <label for="field{$key}">{$label}</label>
+        <input type="text" id="field{$key}" class="{$this->getInputClass($key)} " name="{$key}" value="$value" required>
+        {$this->getErrorFeedback($key)}
+    </div>
+HTML;
+    }
+
     public function inputComment(string $key, string $label, ?string $value): string
     {
         $type = 'text';
-        if ($key === 'password') {
-            $type = 'password';
-        }
-        if ($key === 'email') {
-            $type = 'email';
-        }
+
         return <<<HTML
     <div class="form-group mb-3">
         <label for="field{$key}">{$label}</label>
@@ -82,15 +89,6 @@ HTML;
         {$this->getErrorFeedback($key)}
     </div>
 HTML;
-    }
-
-    public function selectRole($value): string
-    {
-        $value = $this->getValue($value);
-        return <<<HTML
-            <option value="membre">{$value}</option>
-HTML;
-
     }
 
     private function getValue(string $key)

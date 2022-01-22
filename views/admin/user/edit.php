@@ -11,6 +11,7 @@
     <!--Formulaire de modification du rôle-->
     <form action="" method="POST">
         <?= $form->input('username', "Nom d'utilisateur"); ?>
+        <?= $form->input('password', "Mot de passe"); ?>
         <?= $form->input('email', "Adresse mail"); ?>
 
         <label for="fieldrole">Role</label>
