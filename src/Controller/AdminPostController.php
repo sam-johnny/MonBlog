@@ -9,6 +9,7 @@ use App\Model\Post;
 use App\ObjectHandler;
 use App\Table\CategoryTable;
 use App\Table\PostTable;
+use App\Table\UserTable;
 use App\Validator\PostValidator;
 
 class AdminPostController extends AbstractController
@@ -21,7 +22,10 @@ class AdminPostController extends AbstractController
         $post = new Post();
         $pdo = Database::getPDO();
         $categoryTable = new CategoryTable($pdo);
+        $userTable = new UserTable($pdo);
         $categories = $categoryTable->list();
+        $users = $userTable->all();
+
         $post->setCreatedAt(date('Y-m-d H:i:s'));
 
         /* Si des données sont envoyées dans $_POST */
@@ -30,7 +34,7 @@ class AdminPostController extends AbstractController
 
             /* Verification des champs avec Validator */
             $v = new PostValidator($_POST, $postTable, $post->getID(), $categories);
-            ObjectHandler::hydrate($post, $_POST, ['title', 'content', 'slug', 'created_at']);
+            ObjectHandler::hydrate($post, $_POST, ['title', 'chapo','content', 'slug']);
 
             /*Si toutes les régles sont correctes*/
             if ($v->validate()) {
@@ -75,7 +79,7 @@ class AdminPostController extends AbstractController
 
             /* Verification des champs avec Validator */
             $validator = new PostValidator($_POST, $postTable, $post->getID(), $categories);
-            ObjectHandler::hydrate($post, $_POST, ['title', 'content', 'slug', 'created_at']);
+            ObjectHandler::hydrate($post, $_POST, ['title', 'content', 'slug']);
 
             /*Si toutes les régles sont correctes*/
             if ($validator->validate()) {

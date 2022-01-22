@@ -28,7 +28,7 @@ class UserTable extends AbstractTable
             'username' => $user->getUsername(),
             'password' => password_hash($user->getPassword(), PASSWORD_BCRYPT),
             'email' => $user->getEmail(),
-            'role' => 'Non attribué'
+            'role' => 'membre'
         ]);
         $user->setID($id);
 

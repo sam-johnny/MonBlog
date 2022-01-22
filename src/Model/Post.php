@@ -8,10 +8,13 @@ class Post
 {
     private $id;
     private $title;
+    private $chapo;
     private $content;
     private $created_at;
     private $slug;
     private $categories = [];
+    private $user_id;
+    private $update_at;
 
     public function getTitle(): ?string
     {
@@ -51,7 +54,7 @@ class Post
 
     public function getCreatedAt(): \DateTime
     {
-        return new \DateTime($this->created_at, new \DateTimeZone('Europe/Paris'));
+        return new \DateTime($this->created_at);
     }
 
     public function setCreatedAt(string $date): self
@@ -112,5 +115,37 @@ class Post
     {
         $this->categories[] = $category;
         $category->setPost($this);
+    }
+
+    public function getUserID(): ?int
+    {
+        return $this->user_id;
+    }
+
+    public function setUserID(?int $user_id): void
+    {
+        $this->user_id = $user_id;
+    }
+
+    public function getChapo(): ?string
+    {
+        return $this->chapo;
+    }
+
+    public function setChapo(string $chapo): self
+    {
+        $this->chapo = $chapo;
+        return $this;
+    }
+
+    public function getUpdateAt(): \DateTime
+    {
+        return new \DateTime($this->update_at);
+    }
+
+    public function setUpdateAt(string $date): self
+    {
+        $this->update_at = $date;
+        return $this;
     }
 }
