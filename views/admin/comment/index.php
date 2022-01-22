@@ -20,7 +20,6 @@
         <th>Date</th>
         <th>Email</th>
         <th>Commentaire</th>
-        <th>Post_id</th>
         <th>Titre article</th>
         </thead>
         <!--Contenu-->

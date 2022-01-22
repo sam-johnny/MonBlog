@@ -1,9 +1,12 @@
-<?php $post = $posts->find($comment->getPostId())?>
+<?php
+$post = $postTable->find($comment->getPostId());
+$user = $userTable->find($comment->getUserID());
+?>
 <tr>
     <td># <?= $comment->getID() ?></td>
-    <td><?= htmlentities($comment->getUsername()) ?></td>
+    <td><?= htmlentities($user->getUsername()) ?></td>
     <td><?= $comment->getCreatedAt()->format('d/m/Y à H:i:s') ?></td>
-    <td><?= htmlentities($comment->getEmail()) ?></td>
+    <td><?= htmlentities($user->getEmail()) ?></td>
     <td><?= $comment->getFormattedContent() ?></td>
     <td>
         <a href="<?= "/blog/{$post->getSlug()}-{$post->getID()}" ?>"><?= $post->getTitle() ?></a>
