@@ -36,6 +36,7 @@ class AdminUserController extends AbstractController
             if ($validator->validate()) {
                 $userTable->update([
                     'username' => $user->getUsername(),
+                    'password' => password_hash($user->getPassword(), PASSWORD_BCRYPT),
                     'email' => $user->getEmail(),
                     'role' => $user->getRole()
                 ], $user->getID());

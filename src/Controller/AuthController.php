@@ -68,7 +68,7 @@ class AuthController extends AbstractController
             $userTable = new UserTable(Database::getPDO());
             /*Validation des données rentrées avec Validator*/
             $validator = new UserRegisterValidator($_POST, $userTable, $user->getID());
-            ObjectHandler::hydrate($user, $_POST, ['username', 'password', 'email', 'role']);
+            ObjectHandler::hydrate($user, $_POST, ['username', 'password', 'email']);
             if ($validator->validate()) {
                 $userTable->createUser($user);
                 header('Location: /login?register=1');

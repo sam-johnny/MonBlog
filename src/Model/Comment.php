@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-class Comment extends \App\Model\Post
+class Comment
 {
     private $id;
     private $username;
@@ -10,6 +10,7 @@ class Comment extends \App\Model\Post
     private $created_at;
     private $email;
     private $post_id;
+    private $user_id;
 
 
     public function getUsername(): ?string
@@ -72,16 +73,29 @@ class Comment extends \App\Model\Post
         return $this;
     }
 
-    public function getPostID()
+    public function getPostID(): ?int
     {
         return $this->post_id;
     }
 
-    public function setPostId($post_id): self
+    public function setPostID(int $post_id): self
     {
         $this->post_id = $post_id;
         return $this;
     }
+
+    public function getUserID(): ?int
+    {
+        return $this->user_id;
+    }
+
+    public function setUserID($user_id): self
+    {
+        $this->user_id = $user_id;
+        return $this;
+    }
+
+
 
 }
 
