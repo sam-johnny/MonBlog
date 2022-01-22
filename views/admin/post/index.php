@@ -1,6 +1,5 @@
 <!--Section : Gestion des articles-->
 <section class="my-5">
-
     <!--Message de confirmation pour suppression d'article-->
     <?php if (isset($_GET['delete'])): ?>
         <div class="alert alert-success">
