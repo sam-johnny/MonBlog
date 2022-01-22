@@ -20,6 +20,14 @@
             $category_url = "/blog/category/{$category->getSlug()}-{$category->getID()}"; ?>
             <a href="<?= $category_url ?>"><?= htmlentities($category->getName()) ?></a><?php endforeach; ?>
     </p>
+    <!--date de modification-->
+    <?php if (!empty($post->getUpdateAt())): ?>
+    <p class="text-muted fst-italic">Modifié le <?= $post->getUpdateAt()->format('d/m/Y') ?>
+        <?php endif;?>
+    <!--Auteur-->
+    <p class="text-muted fst-italic">Publié par <?= $user->getUsername()?></p>
+    <!--Chapô-->
+    <p class="fw-bold"><?= $post->getChapo()?></p>
     <!--Le contenu-->
     <p><?= $post->getFormattedContent() ?></p>
 </section>
@@ -44,15 +52,7 @@
 
     <!-- Affichage des commentaires -->
     <?php foreach ($comments as $commentary): ?>
-        <div class="col-md-12">
-            <div class="card mb-3 bg-light">
-                <div class="card-body">
-                    <h5 class="card-title"><?= htmlentities($commentary->getUsername()) ?></h5>
-                    <p class="text-muted fst-italic"><?= $commentary->getCreatedAt()->format('d/m/Y à H:i:s') ?>
-                    <p><?= $commentary->getFormattedContent() ?></p>
-                </div>
-            </div>
-        </div>
+            <?php require ('cardComment.php')?>
     <?php endforeach; ?>
 </section>
 
