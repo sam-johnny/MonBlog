@@ -29,7 +29,7 @@ class AbstractTable
      */
     public function find (int $id)
     {
-        $query = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE id = :id');
+        $query = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE id = :id;');
         $query->execute(['id' => $id]);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->class);
         $result = $query->fetch();
@@ -49,7 +49,7 @@ class AbstractTable
      */
     public function exists (string $field, $value, ?int $except = null): bool
     {
-        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE $field = ?";
+        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE $field = ?;";
         $params = [$value];
         if ($except !== null) {
             $sql .= " AND id != ?";
@@ -67,7 +67,7 @@ class AbstractTable
      */
     public function all (): array
     {
-        $sql = "SELECT * FROM {$this->table}";
+        $sql = "SELECT * FROM {$this->table};";
         return $this->pdo->query($sql, PDO::FETCH_CLASS, $this->class)->fetchAll();
     }
 
@@ -79,7 +79,7 @@ class AbstractTable
      */
     public function delete (int $id): void
     {
-        $query = $this->pdo->prepare("DELETE FROM {$this->table} WHERE id = ?");
+        $query = $this->pdo->prepare("DELETE FROM {$this->table} WHERE id = ?;");
         $queryExecute = $query->execute([$id]);
         if ($queryExecute === false) {
             throw new \Exception("Impossible de supprimer l'enregistrement $id dans la table {$this->table}");
@@ -120,7 +120,7 @@ class AbstractTable
         foreach ($data as $key => $value) {
             $sqlFields[] = "$key = :$key";
         }
-        $query = $this->pdo->prepare("UPDATE {$this->table} SET " . implode(', ', $sqlFields) . " WHERE id = :id");
+        $query = $this->pdo->prepare("UPDATE {$this->table} SET " . implode(', ', $sqlFields) . " WHERE id = :id;");
         $queryExecute = $query->execute(array_merge($data, ['id' => $id]));
         if ($queryExecute === false) {
             throw new \Exception("Impossible de modifier l'enregistrement dans la table {$this->table}");
