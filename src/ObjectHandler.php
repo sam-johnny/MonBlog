@@ -4,6 +4,15 @@ namespace App;
 
 class ObjectHandler
 {
+
+
+    /**
+     * Méthode pour hydrater les objets
+     *
+     * @param $object model
+     * @param array $data $_POST
+     * @param array $fields les champs
+     */
     public static function hydrate($object, array $data, array $fields): void
     {
         foreach ($fields as $field) {

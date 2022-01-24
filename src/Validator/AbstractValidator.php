@@ -14,11 +14,21 @@ abstract class AbstractValidator
         $this->validator = new Validator($data);
     }
 
+    /**
+     * Validation des règles
+     *
+     * @return bool
+     */
     public function validate (): bool
     {
         return $this->validator->validate();
     }
 
+    /**
+     * Retour des erreurs
+     *
+     * @return array
+     */
     public function errors (): array
     {
         return $this->validator->errors();

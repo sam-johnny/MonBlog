@@ -4,12 +4,22 @@ namespace App\Table;
 
 use App\Model\Comment;
 
+/**
+ * Class CommentTable
+ * requêtes SQL par table
+ */
 class CommentTable extends AbstractTable
 {
     protected $table = "comment";
     protected $class = Comment::class;
 
 
+    /**
+     * Récupère les commentaires à afficher sur les articles
+     *
+     * @param int $id
+     * @return array
+     */
     public function findComments(int $id): array
     {
         $comments = $this->pdo
@@ -22,6 +32,12 @@ class CommentTable extends AbstractTable
     }
 
 
+    /**
+     * Récupère les commentaires non validés
+     * Pour la partie admin
+     *
+     * @return array
+     */
     public function findCommentsNotValide(): array
     {
         return $this->queryAndFetchAll("SELECT * FROM {$this->table} 

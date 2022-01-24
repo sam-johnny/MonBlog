@@ -5,6 +5,15 @@ use App\Table\PostTable;
 
 class PostValidator extends AbstractValidator
 {
+
+    /**
+     * Paramètre des régles à valider avec Validator
+     *
+     * @param array $data
+     * @param PostTable $table
+     * @param int|null $postID
+     * @param array $categories
+     */
     public function __construct(array $data, PostTable $table, ?int $postID = null, array $categories)
     {
         parent::__construct($data);

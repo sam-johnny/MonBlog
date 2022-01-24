@@ -20,9 +20,9 @@ class AdminCategoryController extends AbstractController
         $errors = [];
         $category = new Category();
 
+        /*Validation des données rentrées avec Validator*/
         if (!empty($_POST)) {
             $categoryTable = new CategoryTable(Database::getPDO());
-            /*Validation des données rentrées avec Validator*/
             $validator = new CategoryValidator($_POST, $categoryTable);
             ObjectHandler::hydrate($category, $_POST, ['name', 'slug']);
             if ($validator->validate()) {

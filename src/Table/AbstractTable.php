@@ -4,17 +4,29 @@ namespace App\Table;
 use App\Table\Exception\NotFoundException;
 use \PDO;
 
+/**
+ * Class AbstractTable
+ * requêtes SQL générales
+ */
 class AbstractTable
 {
     protected $pdo;
     protected $table = null;
     protected $class = null;
 
+
     public function __construct(PDO $pdo)
     {
         $this->pdo = $pdo;
     }
 
+    /**
+     * Récupère des données
+     *
+     * @param int $id
+     * @return mixed
+     * @throws NotFoundException
+     */
     public function find (int $id)
     {
         $query = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE id = :id');
@@ -28,8 +40,11 @@ class AbstractTable
     }
 
     /**
+     * Vérifie si une valeur existe en base de données
+     *
      * @param string $field Champs à rechercher
      * @param mixed $value Valeur associée au champs
+     * @param int|null $except
      * @return bool
      */
     public function exists (string $field, $value, ?int $except = null): bool
@@ -45,13 +60,24 @@ class AbstractTable
         return (int)$query->fetch(PDO::FETCH_NUM)[0] > 0;
     }
 
+    /**
+     * Récupère toutes les données lié à la table dans la base de données
+     *
+     * @return array
+     */
     public function all (): array
     {
         $sql = "SELECT * FROM {$this->table}";
         return $this->pdo->query($sql, PDO::FETCH_CLASS, $this->class)->fetchAll();
     }
 
-    public function delete (int $id)
+    /**
+     * Supprime les éléments lié à l'id dans la base de données
+     *
+     * @param int $id
+     * @throws \Exception
+     */
+    public function delete (int $id): void
     {
         $query = $this->pdo->prepare("DELETE FROM {$this->table} WHERE id = ?");
         $queryExecute = $query->execute([$id]);
@@ -60,6 +86,13 @@ class AbstractTable
         }
     }
 
+    /**
+     * Crée les données lié au tableau dans la base de données
+     *
+     * @param array $data
+     * @return int
+     * @throws \Exception
+     */
     public function create (array $data)
     {
         $sqlFields = [];
@@ -74,6 +107,13 @@ class AbstractTable
         return (int)$this->pdo->lastInsertId();
     }
 
+    /**
+     * Modifie les données dans la base de données
+     *
+     * @param array $data
+     * @param int $id
+     * @throws \Exception
+     */
     public function update (array $data, int $id)
     {
         $sqlFields = [];
@@ -87,6 +127,12 @@ class AbstractTable
         }
     }
 
+    /**
+     * Récupère les données lié à la requête sql dans la base de données
+     *
+     * @param string $sql
+     * @return array
+     */
     public function queryAndFetchAll (string $sql): array
     {
        return $this->pdo->query($sql, PDO::FETCH_CLASS, $this->class)->fetchAll();

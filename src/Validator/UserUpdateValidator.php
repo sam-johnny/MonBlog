@@ -5,6 +5,14 @@ use App\Table\UserTable;
 
 class UserUpdateValidator extends AbstractValidator
 {
+
+    /**
+     * Paramètre des régles à valider avec Validator
+     *
+     * @param array $data $_POST
+     * @param UserTable $table
+     * @param int|null $userID
+     */
     public function __construct(array $data, UserTable $table, ?int $userID = null)
     {
         parent::__construct($data);
