@@ -6,13 +6,19 @@ use App\Security\ForbiddenException;
 
 class Auth
 {
-    public static function loginAdmin()
+
+    /**
+     * Accès administrateur
+     *
+     * @throws ForbiddenException
+     */
+    public static function loginAdmin(): void
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
-        if ($_SESSION['auth']['role'] !== 'admin'){
+        if ($_SESSION['auth']['role'] !== 'admin') {
             throw new ForbiddenException();
         }
 
@@ -21,7 +27,11 @@ class Auth
         }
     }
 
-    public static function login()
+    /**
+     * Pour lançer session_start
+     *
+     */
+    public static function login(): void
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();

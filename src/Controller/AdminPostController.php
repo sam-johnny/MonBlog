@@ -74,25 +74,16 @@ class AdminPostController extends AbstractController
 
         $errors = [];
 
-        /* Si des données sont envoyées dans $_POST */
-        if (!empty($_POST)) {
 
-            /* Verification des champs avec Validator */
+        if (!empty($_POST)) {
             $validator = new PostValidator($_POST, $postTable, $post->getID(), $categories);
             ObjectHandler::hydrate($post, $_POST, ['title', 'content', 'slug']);
 
-            /*Si toutes les régles sont correctes*/
             if ($validator->validate()) {
                 $pdo->beginTransaction();
-
-                /* modification de l'article */
                 $postTable->updatePost($post);
-
-                /* Lié la catégorie */
                 $postTable->attachCategories($post->getID(), $_POST['categories_ids']);
-
                 $pdo->commit();
-
                 $categoryTable->hydratePosts([$post]);
                 $success = true;
             } else {

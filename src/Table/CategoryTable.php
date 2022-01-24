@@ -5,12 +5,18 @@ namespace App\Table;
 use App\Model\Category;
 use \PDO;
 
+/**
+ * Class CategoryTable
+ * requêtes SQL par table
+ */
 class CategoryTable extends AbstractTable
 {
     protected $table = 'category';
     protected $class = Category::class;
 
     /**
+     * Rentre dans les articles les catégories associées
+     *
      * @param App\Model\Post[] $posts
      */
     public function hydratePosts (array $posts): void
@@ -32,11 +38,22 @@ class CategoryTable extends AbstractTable
         }
     }
 
+    /**
+     * Récupère toutes les données de la table
+     *
+     * @return array
+     */
     public function all (): array
     {
         return $this->queryAndFetchAll("SELECT * FROM {$this->table} ORDER BY id DESC");
     }
 
+    /**
+     * Récupère tous les noms des catégories triés par ordre alphabétique
+     * Pour la partie admin
+     *
+     * @return array
+     */
     public function list (): array
     {
         $categories = $this->queryAndFetchAll("SELECT * FROM {$this->table} ORDER BY name ASC");

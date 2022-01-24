@@ -4,6 +4,15 @@ namespace App;
 
 class URL
 {
+
+    /**
+     * Force l'utilisateur à mettre seulement des entiers dans l'url
+     *
+     * @param string $name
+     * @param int|null $default
+     * @return int|null
+     * @throws \Exception
+     */
     public static function getInt(string $name, ?int $default = null): ?int
     {
         if (!isset($_GET[$name])) return $default;
@@ -15,6 +24,14 @@ class URL
         return (int)$_GET[$name];
     }
 
+    /**
+     * Bloque l'utilisateur à rentrer un chiffre négatif dans l'url
+     *
+     * @param string $name
+     * @param int|null $default
+     * @return int|null
+     * @throws \Exception
+     */
     public static function getPositiveInt(string $name, ?int $default = null): ?int
     {
         $param = self::getInt($name, $default);

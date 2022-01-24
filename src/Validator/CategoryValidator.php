@@ -5,6 +5,14 @@ use App\Table\CategoryTable;
 
 class CategoryValidator extends AbstractValidator
 {
+
+    /**
+     * Paramètre des régles à valider avec Validator
+     *
+     * @param array $data
+     * @param CategoryTable $table
+     * @param int|null $categoryID
+     */
     public function __construct(array $data, CategoryTable $table, ?int $categoryID = null)
     {
         parent::__construct($data);

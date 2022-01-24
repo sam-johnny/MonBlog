@@ -4,6 +4,12 @@ namespace App;
 
 class Route
 {
+
+    /**
+     * Les routes
+     *
+     * @return \string[][]
+     */
     public static function getRoutes(): array
     {
         return [

@@ -2,17 +2,32 @@
 
 namespace App\HTML;
 
+/**
+ * Class Form
+ * Permet de générer un formulaire rapidement et simplement
+ */
 class Form
 {
     private $data;
     private $errors;
 
+    /**
+     * @param $data
+     * @param array $errors
+     */
     public function __construct($data, array $errors)
     {
         $this->data = $data;
         $this->errors = $errors;
     }
 
+    /**
+     * Génère le code html de la balise <input>
+     *
+     * @param string $key
+     * @param string $label
+     * @return string
+     */
     public function input(string $key, string $label): string
     {
         $value = $this->getValue($key);
@@ -32,6 +47,13 @@ class Form
 HTML;
     }
 
+    /**
+     * Génère le code html de la balise <input> en valeur de la date du jour
+     *
+     * @param string $key
+     * @param string $label
+     * @return string
+     */
     public function inputUpdateDate(string $key, string $label): string
     {
         $value = date('Y-m-d H:i:s');
@@ -44,6 +66,14 @@ HTML;
 HTML;
     }
 
+    /**
+     * Génère le code html de la balise <input> pour les commentaires
+     *
+     * @param string $key
+     * @param string $label
+     * @param string|null $value
+     * @return string
+     */
     public function inputComment(string $key, string $label, ?string $value): string
     {
         $type = 'text';
@@ -58,7 +88,13 @@ HTML;
 
     }
 
-
+    /**
+     * Génère le code html de la balise <textarea>
+     *
+     * @param string $key
+     * @param string $label
+     * @return string
+     */
     public function textarea(string $key, string $label): string
     {
 
@@ -72,6 +108,14 @@ HTML;
 HTML;
     }
 
+    /**
+     * Génère le code html de la balise <select>
+     *
+     * @param string $key
+     * @param string $label
+     * @param array $options
+     * @return string
+     */
     public function select(string $key, string $label, array $options = []): string
     {
         $optionsHTML = [];
@@ -91,6 +135,12 @@ HTML;
 HTML;
     }
 
+    /**
+     * Génère les gets automatiquement pour la valeur du champ
+     *
+     * @param string $key
+     * @return mixed|string|null
+     */
     private function getValue(string $key)
     {
         if (is_array($this->data)) {
@@ -104,6 +154,12 @@ HTML;
         return $value;
     }
 
+    /**
+     * Génère 'is-invalid' si l'utilisateur ne respecte pas les règles mises dans les classes de validator
+     *
+     * @param string $key
+     * @return string
+     */
     private function getInputClass(string $key): string
     {
         $inputClass = 'form-control';
@@ -113,6 +169,12 @@ HTML;
         return $inputClass;
     }
 
+    /**
+     * Génère 'invalid-feedback' si l'utilisateur ne respecte pas les règles mises dans les classes de validator
+     *
+     * @param string $key
+     * @return string
+     */
     private function getErrorFeedback(string $key): string
     {
         if (isset($this->errors[$key])) {

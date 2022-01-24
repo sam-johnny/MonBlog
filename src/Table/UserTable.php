@@ -5,11 +5,22 @@ namespace App\Table;
 use App\Model\User;
 use App\Table\Exception\NotFoundException;
 
+/**
+ * Class UserTable
+ * requêtes SQL par table
+ */
 class UserTable extends AbstractTable
 {
     protected $table = "user";
     protected $class = User::class;
 
+    /**
+     * Récupère les données lié à l'username dans la base de données
+     *
+     * @param string $username
+     * @return mixed
+     * @throws NotFoundException
+     */
     public function findByUsername(string $username)
     {
         $query = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE username = :username');
@@ -22,15 +33,22 @@ class UserTable extends AbstractTable
         return $result;
     }
 
+    /**
+     * Crée les données lié au tableau dans la base de données
+     * La partie execute de la méthode create de class AbstractTable
+     *
+     * @param User $user
+     * @throws \Exception
+     */
     public function createUser(User $user): void
     {
-        $id = $this->create([
+        $create = $this->create([
             'username' => $user->getUsername(),
             'password' => password_hash($user->getPassword(), PASSWORD_BCRYPT),
             'email' => $user->getEmail(),
             'role' => 'membre'
         ]);
-        $user->setID($id);
+        $user->setID($create);
 
     }
 }

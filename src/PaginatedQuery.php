@@ -21,6 +21,13 @@ class PaginatedQuery
         $this->pdo = $pdo ?: Database::getPDO();
     }
 
+    /**
+     * Récupère les articles pour notre listing
+     *
+     * @param string $classMapping
+     * @return array
+     * @throws \Exception
+     */
     public function getItems(string $classMapping): array
     {
         if ($this->items === null) {
@@ -36,6 +43,15 @@ class PaginatedQuery
         return $this->items;
     }
 
+    /**
+     * Affiche les numéros des pages
+     *
+     * @param string $link
+     * @param int $i
+     * @param string|null $active
+     * @return string|null
+     * @throws \Exception
+     */
     public function numPage(string $link, int $i, ?string $active = null): ?string
     {
 
@@ -47,6 +63,13 @@ class PaginatedQuery
 HTML;
     }
 
+    /**
+     * Soustrait -1 sur la page
+     *
+     * @param string $link
+     * @return string|null
+     * @throws \Exception
+     */
     public function previousPage(string $link): ?string
     {
         $currentPage = $this->getCurrentPage();
@@ -57,6 +80,13 @@ HTML;
 HTML;
     }
 
+    /**
+     * Rajoute +1 sur la page
+     *
+     * @param string $link
+     * @return string|null
+     * @throws \Exception
+     */
     public function nextPage(string $link): ?string
     {
         $currentPage = $this->getCurrentPage();
@@ -68,11 +98,23 @@ HTML;
 HTML;
     }
 
+    /**
+     * La page courante est toujours un nombre positif
+     * Cette méthode sert à ne pas répéter 'URL::getPositiveInt('page', 1)'
+     *
+     * @return int
+     * @throws \Exception
+     */
     private function getCurrentPage(): int
     {
         return URL::getPositiveInt('page', 1);
     }
 
+    /**
+     * Calcul le nombre total des pages
+     *
+     * @return int
+     */
     public function getTotalPages(): int
     {
         if ($this->count === null) {

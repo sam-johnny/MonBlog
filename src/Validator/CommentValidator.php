@@ -3,6 +3,12 @@ namespace App\Validator;
 
 class CommentValidator extends AbstractValidator
 {
+
+    /**
+     * Paramètre des régles à valider avec Validator
+     *
+     * @param array $data
+     */
     public function __construct(array $data)
     {
         parent::__construct($data);

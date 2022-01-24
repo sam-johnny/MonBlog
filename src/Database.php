@@ -7,6 +7,11 @@ use \PDO;
 class Database
 {
 
+    /**
+     * Connection à la base de données
+     *
+     * @return PDO
+     */
     public static function getPDO(): PDO
     {
         $db_name = getenv('DB_NAME');

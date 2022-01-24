@@ -29,8 +29,9 @@ class ContactController extends AbstractController
             /*Validation des données rentrées avec Validator*/
             Validator::lang('fr');
             $validator = new ContactValidator($_POST);
+            $mailContact = new MailContact();
             if ($validator->validate()) {
-                (new MailContact())->mail($_POST['username'], $_POST['message'], $_POST['email']);
+                $mailContact->mailContact($_POST['username'], $_POST['message'], $_POST['email']);
                 header('Location: /contact?send=1');
                 exit();
             } else {
