@@ -62,7 +62,7 @@ class PostTable extends AbstractTable
      */
     public function attachCategories(int $id, array $categories): void
     {
-        $this->pdo->exec('DELETE FROM post_category WHERE post_id = ' . $id;);
+        $this->pdo->exec('DELETE FROM post_category WHERE post_id = ' . $id);
         $query = $this->pdo->prepare('INSERT INTO post_category SET post_id = ?, category_id = ?;');
         foreach ($categories as $category) {
             $query->execute([$id, $category]);
