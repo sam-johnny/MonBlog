@@ -1,7 +1,7 @@
 <?php
 namespace App\Validator;
 
-use App\Table\PostTable;
+use App\Model\Manager\PostManager;
 
 class PostValidator extends AbstractValidator
 {
@@ -10,11 +10,11 @@ class PostValidator extends AbstractValidator
      * Paramètre des régles à valider avec Validator
      *
      * @param array $data
-     * @param PostTable $table
+     * @param PostManager $table
      * @param int|null $postID
      * @param array $categories
      */
-    public function __construct(array $data, PostTable $table, ?int $postID = null, array $categories)
+    public function __construct(array $data, PostManager $table, ?int $postID = null, array $categories)
     {
         parent::__construct($data);
         $this->validator->labels(array(

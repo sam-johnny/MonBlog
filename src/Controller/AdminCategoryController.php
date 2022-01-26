@@ -6,9 +6,9 @@ namespace App\Controller;
 use App\Auth;
 use App\Database;
 use App\HTML\Form;
-use App\Model\Category;
+use App\Model\Entity\Category;
 use App\ObjectHandler;
-use App\Table\CategoryTable;
+use App\Model\Manager\CategoryManager;
 use App\Validator\CategoryValidator;
 
 class AdminCategoryController extends AbstractController
@@ -22,11 +22,11 @@ class AdminCategoryController extends AbstractController
 
         /*Validation des données rentrées avec Validator*/
         if (!empty($_POST)) {
-            $categoryTable = new CategoryTable(Database::getPDO());
-            $validator = new CategoryValidator($_POST, $categoryTable);
+            $categoryManager = new CategoryManager(Database::getPDO());
+            $validator = new CategoryValidator($_POST, $categoryManager);
             ObjectHandler::hydrate($category, $_POST, ['name', 'slug']);
             if ($validator->validate()) {
-                $categoryTable->create([
+                $categoryManager->create([
                     'name' => $category->getName(),
                     'slug' => $category->getSlug()
                 ]);
@@ -45,16 +45,16 @@ class AdminCategoryController extends AbstractController
     {
         Auth::loginAdmin();
 
-        $categoryTable = new CategoryTable(Database::getPDO());
-        $category = $categoryTable->find($params['id']);
+        $categoryManager = new CategoryManager(Database::getPDO());
+        $category = $categoryManager->find($params['id']);
         $success = false;
         $errors = [];
         /*Validation des données rentrées avec Validator*/
         if (!empty($_POST)) {
-            $validator = new CategoryValidator($_POST, $categoryTable, $category->getID());
+            $validator = new CategoryValidator($_POST, $categoryManager, $category->getID());
             ObjectHandler::hydrate($category, $_POST, ['name', 'slug']);
             if ($validator->validate()) {
-                $categoryTable->update([
+                $categoryManager->update([
                     'name' => $category->getName(),
                     'slug' => $category->getSlug()
                 ], $category->getID());
@@ -72,8 +72,8 @@ class AdminCategoryController extends AbstractController
     {
         Auth::loginAdmin();
 
-        $table = new CategoryTable(Database::getPDO());
-        $table->delete($params['id']);
+        $categoryManager = new CategoryManager(Database::getPDO());
+        $categoryManager->delete($params['id']);
         header('Location: ' . '/admin/categories?delete=1');
     }
 
@@ -83,7 +83,7 @@ class AdminCategoryController extends AbstractController
 
         $title = "Gestion des catégories";
         $link = '/admin/categories';
-        $categories = (new CategoryTable(Database::getPDO()))->all();
+        $categories = (new CategoryManager(Database::getPDO()))->all();
         $this->render('admin/category/index', compact('title', 'link', 'categories'));
     }
 

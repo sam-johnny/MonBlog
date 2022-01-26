@@ -8,7 +8,7 @@ class Route
     /**
      * Les routes
      *
-     * @return \string[][]
+     * @return string[][]
      */
     public static function getRoutes(): array
     {

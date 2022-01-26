@@ -5,12 +5,11 @@ namespace App\Controller;
 use App\Auth;
 use App\Database;
 use App\HTML\Form;
-use App\Model\User;
+use App\Model\Entity\User;
 use App\ObjectHandler;
-use App\Table\Exception\NotFoundException;
-use App\Table\UserTable;
+use App\Exception\NotFoundException;
+use App\Model\Manager\UserManager;
 use App\Validator\UserRegisterValidator;
-use App\Validator\UserValidator;
 
 class AuthController extends AbstractController
 {
@@ -25,9 +24,9 @@ class AuthController extends AbstractController
             $errors['password'] = 'Identifiant ou mot de passe incorrect';
 
             if (!empty($_POST['username']) || !empty($_POST['password'])) {
-                $table = new UserTable(Database::getPDO());
+                $userManager = new UserManager(Database::getPDO());
                 try {
-                    $username = $table->findByUsername($_POST['username']);
+                    $username = $userManager->findByUsername($_POST['username']);
                     if (password_verify($_POST['password'], $username->getPassword()) === true) {
                         $_SESSION['auth'] = [
                             'id' => $username->getId(),
@@ -59,18 +58,21 @@ class AuthController extends AbstractController
         exit();
     }
 
+    /**
+     * @throws \Exception
+     */
     public function register()
     {
         $errors = [];
         $user = new User();
 
         if (!empty($_POST)) {
-            $userTable = new UserTable(Database::getPDO());
+            $userManager = new UserManager(Database::getPDO());
             /*Validation des données rentrées avec Validator*/
-            $validator = new UserRegisterValidator($_POST, $userTable, $user->getID());
+            $validator = new UserRegisterValidator($_POST, $userManager, $user->getID());
             ObjectHandler::hydrate($user, $_POST, ['username', 'password', 'email']);
             if ($validator->validate()) {
-                $userTable->createUser($user);
+                $userManager->createUser($user);
                 header('Location: /login?register=1');
                 exit();
             } else {

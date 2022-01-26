@@ -1,7 +1,7 @@
 <?php
 namespace App\Validator;
 
-use App\Table\CategoryTable;
+use App\Model\Manager\CategoryManager;
 
 class CategoryValidator extends AbstractValidator
 {
@@ -10,10 +10,10 @@ class CategoryValidator extends AbstractValidator
      * Paramètre des régles à valider avec Validator
      *
      * @param array $data
-     * @param CategoryTable $table
+     * @param CategoryManager $table
      * @param int|null $categoryID
      */
-    public function __construct(array $data, CategoryTable $table, ?int $categoryID = null)
+    public function __construct(array $data, CategoryManager $table, ?int $categoryID = null)
     {
         parent::__construct($data);
         $this->validator->labels(array(

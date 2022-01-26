@@ -9,7 +9,7 @@ class ObjectHandler
     /**
      * Méthode pour hydrater les objets
      *
-     * @param $object model
+     * @param $object
      * @param array $data $_POST
      * @param array $fields les champs
      */

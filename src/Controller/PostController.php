@@ -5,12 +5,12 @@ namespace App\Controller;
 use App\Auth;
 use App\Database;
 use App\HTML\Form;
-use App\Model\Comment;
+use App\Model\Entity\Comment;
 use App\ObjectHandler;
-use App\Table\CategoryTable;
-use App\Table\CommentTable;
-use App\Table\PostTable;
-use App\Table\UserTable;
+use App\Model\Manager\CategoryManager;
+use App\Model\Manager\CommentManager;
+use App\Model\Manager\PostManager;
+use App\Model\Manager\UserManager;
 use App\Validator\CommentValidator;
 use Valitron\Validator;
 
@@ -25,13 +25,13 @@ class PostController extends AbstractController
         $title = 'Mon Blog';
         $pdo = Database::getPDO();
 
-        $postTable = new PostTable($pdo);
-        $userTable = new UserTable($pdo);
-        [$posts, $paginatedQuery, $totalPages] = $postTable->findPaginated(6);
+        $postManager = new PostManager($pdo);
+        $userManager = new UserManager($pdo);
+        [$posts, $paginatedQuery, $totalPages] = $postManager->findPaginated(6);
 
         $link = "/blog";
 
-        $this->render('post/blog', compact('title', 'posts', 'paginatedQuery', 'totalPages', 'link', 'userTable'));
+        $this->render('post/blog', compact('title', 'posts', 'paginatedQuery', 'totalPages', 'link', 'userManager'));
     }
 
     public function show(array $params)
@@ -44,15 +44,15 @@ class PostController extends AbstractController
         $pdo = Database::getPDO();
 
         /*Récupération des articles*/
-        $post = (new PostTable($pdo))->find($id);
-        (new CategoryTable($pdo))->hydratePosts([$post]);
+        $post = (new PostManager($pdo))->find($id);
+        (new CategoryManager($pdo))->hydratePosts([$post]);
 
-        $userTable = new UserTable($pdo);
-        $user = $userTable->find($post->getUserID());
+        $userManager = new UserManager($pdo);
+        $user = $userManager->find($post->getUserID());
 
         /*Récupération des commentaires*/
-        $commentTable = new CommentTable($pdo);
-        $comments = $commentTable->findComments($id);
+        $commentManager = new CommentManager($pdo);
+        $comments = $commentManager->findComments($id);
         $comment = new Comment();
         $comment->setCreatedAt(date('Y-m-d H:i:s'));
 
@@ -63,7 +63,7 @@ class PostController extends AbstractController
             $validator = new CommentValidator($_POST);
             ObjectHandler::hydrate($comment, $_POST, ['content']);
             if ($validator->validate()) {
-                $commentTable->create([
+                $commentManager->create([
                     'content' => $comment->getContent(),
                     'post_id' => $post->getID(),
                     'created_at' => $comment->getCreatedAt()->format('Y-m-d H:i:s'),
@@ -84,6 +84,6 @@ class PostController extends AbstractController
         }
 
         $form = new Form($comment, $errors);
-        $this->render('post/show', compact('comments', 'form', 'post', 'user', 'userTable'));
+        $this->render('post/show', compact('comments', 'form', 'post', 'user', 'userManager'));
     }
 }

@@ -5,11 +5,11 @@ namespace App\Controller;
 use App\Auth;
 use App\Database;
 use App\HTML\Form;
-use App\Model\Post;
+use App\Model\Entity\Post;
 use App\ObjectHandler;
-use App\Table\CategoryTable;
-use App\Table\PostTable;
-use App\Table\UserTable;
+use App\Model\Manager\CategoryManager;
+use App\Model\Manager\PostManager;
+use App\Model\Manager\UserManager;
 use App\Validator\PostValidator;
 
 class AdminPostController extends AbstractController
@@ -21,19 +21,19 @@ class AdminPostController extends AbstractController
         $errors = [];
         $post = new Post();
         $pdo = Database::getPDO();
-        $categoryTable = new CategoryTable($pdo);
-        $userTable = new UserTable($pdo);
-        $categories = $categoryTable->list();
-        $users = $userTable->all();
+        $categoryManager = new CategoryManager($pdo);
+        $userManager = new UserManager($pdo);
+        $categories = $categoryManager->list();
+        $users = $userManager->all();
 
         $post->setCreatedAt(date('Y-m-d H:i:s'));
 
         /* Si des données sont envoyées dans $_POST */
         if (!empty($_POST)) {
-            $postTable = new PostTable($pdo);
+            $postManager = new PostManager($pdo);
 
             /* Verification des champs avec Validator */
-            $v = new PostValidator($_POST, $postTable, $post->getID(), $categories);
+            $v = new PostValidator($_POST, $postManager, $post->getID(), $categories);
             ObjectHandler::hydrate($post, $_POST, ['title', 'chapo','content', 'slug']);
 
             /*Si toutes les régles sont correctes*/
@@ -41,10 +41,10 @@ class AdminPostController extends AbstractController
                 $pdo->beginTransaction();
 
                 /* création de l'article */
-                $postTable->createPost($post);
+                $postManager->createPost($post);
 
                 /* Lié la catégorie à l'article*/
-                $postTable->attachCategories($post->getID(), $_POST['categories_ids']);
+                $postManager->attachCategories($post->getID(), $_POST['categories_ids']);
 
                 $pdo->commit();
 
@@ -65,26 +65,26 @@ class AdminPostController extends AbstractController
         Auth::loginAdmin();
 
         $pdo = Database::getPDO();
-        $postTable = new PostTable($pdo);
-        $categoryTable = new CategoryTable($pdo);
-        $categories = $categoryTable->list();
-        $post = $postTable->find($params['id']);
-        $categoryTable->hydratePosts([$post]);
+        $postManager = new PostManager($pdo);
+        $categoryManager = new CategoryManager($pdo);
+        $categories = $categoryManager->list();
+        $post = $postManager->find($params['id']);
+        $categoryManager->hydratePosts([$post]);
         $success = false;
 
         $errors = [];
 
 
         if (!empty($_POST)) {
-            $validator = new PostValidator($_POST, $postTable, $post->getID(), $categories);
+            $validator = new PostValidator($_POST, $postManager, $post->getID(), $categories);
             ObjectHandler::hydrate($post, $_POST, ['title', 'content', 'slug']);
 
             if ($validator->validate()) {
                 $pdo->beginTransaction();
-                $postTable->updatePost($post);
-                $postTable->attachCategories($post->getID(), $_POST['categories_ids']);
+                $postManager->updatePost($post);
+                $postManager->attachCategories($post->getID(), $_POST['categories_ids']);
                 $pdo->commit();
-                $categoryTable->hydratePosts([$post]);
+                $categoryManager->hydratePosts([$post]);
                 $success = true;
             } else {
                 $errors = $validator->errors();
@@ -99,8 +99,8 @@ class AdminPostController extends AbstractController
     {
         Auth::loginAdmin();
 
-        $table = new PostTable(Database::getPDO());
-        $table->delete($params['id']);
+        $postManager = new PostManager(Database::getPDO());
+        $postManager->delete($params['id']);
 
         header('Location: ' . '/admin/posts' . '?delete=1');
     }
@@ -111,7 +111,7 @@ class AdminPostController extends AbstractController
 
         $title = "Gestion des articles";
         $link = '/admin/posts';
-        $posts = (new PostTable(Database::getPDO()))->all();
+        $posts = (new PostManager(Database::getPDO()))->all();
         $this->render('admin/post/index', compact('title', 'link', 'posts'));
     }
 
