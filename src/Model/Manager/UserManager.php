@@ -3,7 +3,7 @@
 namespace App\Model\Manager;
 
 use App\Model\Entity\User;
-use App\Table\Exception\NotFoundException;
+use App\Exception\NotFoundException;
 
 /**
  * Class UserManager
