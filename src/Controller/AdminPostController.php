@@ -22,9 +22,7 @@ class AdminPostController extends AbstractController
         $post = new Post();
         $pdo = Database::getPDO();
         $categoryManager = new CategoryManager($pdo);
-        $userManager = new UserManager($pdo);
         $categories = $categoryManager->list();
-        $users = $userManager->all();
 
         $post->setCreatedAt(date('Y-m-d H:i:s'));
 
