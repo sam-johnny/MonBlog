@@ -8,7 +8,7 @@ foreach ($post->getCategories() as $category) {
 HTML;
 }
 
-$user = $userTable->find($post->getUserID());
+$user = $userManager->find($post->getUserID());
 ?>
 <!--Cards pour la liste des articles-->
 <div class="card mb-3 bg-light">

@@ -4,9 +4,9 @@ namespace App\Controller;
 
 use App\Auth;
 use App\Database;
-use App\Table\CategoryTable;
-use App\Table\PostTable;
-use App\Table\UserTable;
+use App\Model\Manager\CategoryManager;
+use App\Model\Manager\PostManager;
+use App\Model\Manager\UserManager;
 
 class CategoryController extends AbstractController
 {
@@ -17,9 +17,9 @@ class CategoryController extends AbstractController
         $id = (int)$params['id'];
         $slug = $params['slug'];
         $pdo = Database::getPDO();
-        $category = (new CategoryTable($pdo))->find($id);
+        $category = (new CategoryManager($pdo))->find($id);
 
-        $userTable = new UserTable($pdo);
+        $userManager = new UserManager($pdo);
 
         /* Si l'utilisateur essaye de rentrer un slug qui n'existe pas cela renvoie à la page actuelle */
         if ($category->getSlug() !== $slug) {
@@ -30,10 +30,10 @@ class CategoryController extends AbstractController
 
         $title = $category->getName();
 
-        [$posts, $paginatedQuery, $totalPages] = (new PostTable(Database::getPDO()))->findPaginatedForCategory($category->getID(), 8);
+        [$posts, $paginatedQuery, $totalPages] = (new PostManager(Database::getPDO()))->findPaginatedForCategory($category->getID(), 8);
 
         $link = "/blog/category/{$category->getSlug()}-$id";
 
-        $this->render('category/show', compact('title', 'posts', 'paginatedQuery', 'totalPages', 'link', 'userTable'));
+        $this->render('category/show', compact('title', 'posts', 'paginatedQuery', 'totalPages', 'link', 'userManager'));
     }
 }

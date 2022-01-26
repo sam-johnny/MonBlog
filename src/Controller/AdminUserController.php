@@ -6,7 +6,7 @@ use App\Auth;
 use App\Database;
 use App\HTML\Form;
 use App\ObjectHandler;
-use App\Table\UserTable;
+use App\Model\Manager\UserManager;
 use App\Validator\UserUpdateValidator;
 class AdminUserController extends AbstractController
 {
@@ -16,7 +16,7 @@ class AdminUserController extends AbstractController
 
         $title = "Gestion des rôles";
         $link = '/admin/users';
-        $users = (new UserTable(Database::getPDO()))->all();
+        $users = (new UserManager(Database::getPDO()))->all();
         $this->render('admin/user/index', compact('title', 'link', 'users'));
     }
 
@@ -24,17 +24,17 @@ class AdminUserController extends AbstractController
     {
         Auth::loginAdmin();
 
-        $userTable = new UserTable(Database::getPDO());
-        $user = $userTable->find($params['id']);
+        $userManager = new UserManager(Database::getPDO());
+        $user = $userManager->find($params['id']);
         $success = false;
         $errors = [];
 
         if (!empty($_POST)) {
             /*Validation des données rentrées avec Validator*/
-            $validator = new UserUpdateValidator($_POST, $userTable, $user->getID());
+            $validator = new UserUpdateValidator($_POST, $userManager, $user->getID());
             ObjectHandler::hydrate($user, $_POST, ['username', 'email' , 'role']);
             if ($validator->validate()) {
-                $userTable->update([
+                $userManager->update([
                     'username' => $user->getUsername(),
                     'password' => password_hash($user->getPassword(), PASSWORD_BCRYPT),
                     'email' => $user->getEmail(),

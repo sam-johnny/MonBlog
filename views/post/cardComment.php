@@ -1,5 +1,5 @@
 <?php
-$userComment = $userTable->find($commentary->getUserID());
+$userComment = $userManager->find($commentary->getUserID());
 ?>
 <div class="col-md-12">
     <div class="card mb-3 bg-light">

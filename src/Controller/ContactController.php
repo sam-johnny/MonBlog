@@ -1,12 +1,4 @@
 <?php
-
-/**
- * Created by PhpStorm.
- * User: SAM Johnny
- * Date: 10/01/2022
- * Time: 18:00
- */
-
 namespace App\Controller;
 
 use App\Auth;

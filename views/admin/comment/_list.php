@@ -1,6 +1,6 @@
 <?php
-$post = $postTable->find($comment->getPostId());
-$user = $userTable->find($comment->getUserID());
+$post = $postManager->find($comment->getPostId());
+$user = $userManager->find($comment->getUserID());
 ?>
 <tr>
     <td># <?= $comment->getID() ?></td>
