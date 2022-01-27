@@ -49,4 +49,15 @@ class AdminUserController extends AbstractController
         $form = new Form($user, $errors);
         $this->render('admin/user/edit', compact('success', 'form', 'user'));
     }
+
+    public function delete($params)
+    {
+        Auth::loginAdmin();
+
+        $userManager = new UserManager(Database::getPDO());
+        $userManager->delete($params['id']);
+        header('Location: ' . '/admin/users?delete=1');
+    }
+
+
 }
