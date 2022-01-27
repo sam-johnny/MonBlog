@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS `db_myblog`.`post` (
     CONSTRAINT `fk_post_user1`
     FOREIGN KEY (`user_id`)
     REFERENCES `db_myblog`.`user` (`id`)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
 CREATE INDEX `fk_post_user1_idx` ON `db_myblog`.`post` (`user_id` ASC) VISIBLE;
@@ -92,12 +92,12 @@ CREATE TABLE IF NOT EXISTS `db_myblog`.`comment` (
     FOREIGN KEY (`post_id`)
     REFERENCES `db_myblog`.`post` (`id`)
     ON DELETE CASCADE
-    ON UPDATE RESTRICT,
+    ON UPDATE CASCADE,
     CONSTRAINT `fk_comment_user1`
     FOREIGN KEY (`user_id`)
     REFERENCES `db_myblog`.`user` (`id`)
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
 CREATE INDEX `fk_comments_post1_idx` ON `db_myblog`.`comment` (`post_id` ASC) VISIBLE;
