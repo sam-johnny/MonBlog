@@ -26,7 +26,7 @@ class CommentManager extends AbstractManager
             ->query("SELECT *
                             FROM {$this->table}
                             WHERE post_id = {$id} AND status = 1
-                            ORDER BY id DESC;")
+                            ORDER BY id DESC")
             ->fetchAll(\PDO::FETCH_CLASS, $this->class);
         return $comments;
     }
@@ -42,7 +42,7 @@ class CommentManager extends AbstractManager
     {
         return $this->queryAndFetchAll("SELECT * FROM {$this->table} 
                                             WHERE status = 0
-                                            ORDER BY id DESC;");
+                                            ORDER BY id DESC");
     }
 
 }

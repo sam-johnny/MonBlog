@@ -30,7 +30,7 @@ class CategoryManager extends AbstractManager
             ->query('SELECT c.*, pc.post_id
                             FROM post_category pc
                             JOIN category c ON c.id = pc.category_id
-                            WHERE pc.post_id IN (' . implode(',', array_keys($postById)) . ');'
+                            WHERE pc.post_id IN (' . implode(',', array_keys($postById)) . ')'
         )->fetchAll(PDO::FETCH_CLASS, $this->class);
 
         foreach ($categories as $category) {
@@ -45,7 +45,7 @@ class CategoryManager extends AbstractManager
      */
     public function all (): array
     {
-        return $this->queryAndFetchAll("SELECT * FROM {$this->table} ORDER BY id DESC;");
+        return $this->queryAndFetchAll("SELECT * FROM {$this->table} ORDER BY id DESC");
     }
 
     /**

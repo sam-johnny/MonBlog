@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `db_myblog`.`post` (
     FOREIGN KEY (`user_id`)
     REFERENCES `db_myblog`.`user` (`id`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
+    ON UPDATE RESTRICT)
     ENGINE = InnoDB;
 
 CREATE INDEX `fk_post_user1_idx` ON `db_myblog`.`post` (`user_id` ASC) VISIBLE;
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `db_myblog`.`post_category` (
     CONSTRAINT `fk_table1_category1`
     FOREIGN KEY (`category_id`)
     REFERENCES `db_myblog`.`category` (`id`)
-    ON DELETE RESTRICT
+    ON DELETE CASCADE
     ON UPDATE RESTRICT)
     ENGINE = InnoDB;
 

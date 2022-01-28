@@ -15,7 +15,8 @@
         "altorouter/altorouter": "^2.0",
         "filp/whoops": "^2.14",
         "vlucas/valitron": "^1.4",
-        "vlucas/phpdotenv": "^5.4"
+        "vlucas/phpdotenv": "^5.4",
+        "symfony/var-dumper": "^6.0"
 
     }
 }

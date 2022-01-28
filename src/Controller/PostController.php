@@ -27,7 +27,7 @@ class PostController extends AbstractController
 
         $postManager = new PostManager($pdo);
         $userManager = new UserManager($pdo);
-        [$posts, $paginatedQuery, $totalPages] = $postManager->findPaginated(6);
+        [$posts, $paginatedQuery, $totalPages] = $postManager->findPaginated(4);
 
         $link = "/blog";
 

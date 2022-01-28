@@ -23,7 +23,7 @@ class UserManager extends AbstractManager
      */
     public function findByUsername(string $username)
     {
-        $query = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE username = :username;');
+        $query = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE username = :username');
         $query->execute(['username' => $username]);
         $query->setFetchMode(\PDO::FETCH_CLASS, $this->class);
         $result = $query->fetch();
