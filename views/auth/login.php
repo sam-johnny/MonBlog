@@ -3,16 +3,9 @@
     <!--Si utilisateur non connecté essaye d'accéder au contenu admin-->
     <?php if (isset($_GET['forbidden'])): ?>
         <div class="alert alert-danger">
-            Veuillez vous connecter.
+            Veuillez vous connecter. Pour accéder à ce contenu.
         </div>
     <?php endif; ?>
-    <!--Si utilisateur ne possède pas les accès, il est redirigé sur cette page-->
-    <?php if (isset($_GET['notaccess'])): ?>
-        <div class="alert alert-danger">
-            Vous n'avez pas les droits pour accéder à cette page.
-        </div>
-    <?php endif; ?>
-
     <!--Si inscription validé alors redirection sur cette page avec message-->
     <?php if (isset($_GET['register'])): ?>
         <div class="alert alert-success">
