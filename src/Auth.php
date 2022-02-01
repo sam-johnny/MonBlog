@@ -17,13 +17,15 @@ class Auth
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-
-        if ($_SESSION['auth']['role'] !== 'admin') {
-            throw new ForbiddenException();
+        
+        if (!isset($_SESSION['auth'])) {
+            header('Location: ' . "/login?forbidden=1");
+            exit();
         }
 
-        if (!isset($_SESSION['auth'])) {
-            throw new ForbiddenException();
+        if ($_SESSION['auth']['role'] !== 'admin') {
+            header('Location: ' . "/login?forbidden=1");
+            exit();
         }
     }
 
